@@ -1,9 +1,7 @@
-def cargar_texto(ruta):
-    """Carga secuencial de un .txt: un registro por línea, separado por coma.
-    Devuelve una lista de dicts (E1 puede quedar así)."""
+def cargar_csv(ruta):
+    """Carga secuencial. Devuelve una lista de dicts (E1 puede quedar así)."""
     raise NotImplementedError
 
 
-def guardar_texto(ruta, filas, encabezados):
-    """Escribe el catálogo en .txt con la primera línea de encabezados."""
+def guardar_csv(ruta, filas, encabezados):
     raise NotImplementedError
