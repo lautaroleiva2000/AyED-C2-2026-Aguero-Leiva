@@ -4,16 +4,26 @@ Completar y hacer crecer en cada entrega. No hace falta prosa larga: oraciones c
 
 ## 1. Grupo y tema
 
-- Tema:
-- Por qué lo eligieron (5–8 líneas):
+- Tema: Recetario
+- Por qué lo eligieron (5–8 líneas): Elegimos el tema Recetario porque nos pareció una opción sencilla de comprender
+y cercana a situaciones cotidianas. El sistema permite trabajar con distintas
+recetas y datos como su nombre, tiempo de preparación, dificultad y categoría.
+Además, consideramos que el tema permite aplicar de forma clara los contenidos
+que iremos viendo durante la materia. En esta primera entrega trabajamos con
+los datos proporcionados por la cátedra en archivos CSV y mostramos el catálogo
+de recetas desde el programa.
 
 ## 2. Modelo
 
-Qué es un ítem del catálogo. Qué es mutable y qué no (E1). Cómo se relacionan catálogo, colección principal, pila y cola.
+En esta primera entrega, cada receta se representa con los datos obtenidos
+del archivo recetas.csv: id, nombre, tiempo de preparación, dificultad y categoría.
 
-```text
-(pueden pegar un diagrama ASCII o una lista de clases)
-```
+El catálogo se guarda en una lista de Python, por lo que es una estructura mutable:
+se pueden agregar, eliminar o modificar elementos.
+
+Cada receta se carga actualmente como un diccionario, que también es mutable.
+Sin embargo, consideramos que el id identifica de manera única a una receta
+y no debería cambiar una vez asignado.
 
 ## 3. Recursión (E2)
 
