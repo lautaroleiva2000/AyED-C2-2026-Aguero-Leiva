@@ -1,4 +1,5 @@
 from src.config import TEMA
+from src.persistencia.texto import cargar_csv
 
 TEMAS = {
     "pokedex": "Pokédex",
@@ -7,8 +8,18 @@ TEMAS = {
 }
 
 
-def pendiente():
-    print("Todavía no está implementado. Completar en la entrega que corresponde.")
+def listar_catalogo(recetas):
+    print()
+    print("=== RECETARIO ===")
+
+    for receta in recetas:
+        print(
+            f'{receta["id"]}. {receta["nombre"]} - '
+            f'{receta["tiempo_min"]} min - '
+            f'Dificultad: {receta["dificultad"]} - '
+            f'Categoría: {receta["categoria"]}'
+        )
+   
 
 
 def mostrar_menu():
@@ -31,6 +42,8 @@ def main():
     if TEMA not in TEMAS:
         print("Seteá TEMA en src/config.py: 'pokedex', 'recetario' o 'musica'.")
         return
+        
+    recetas = cargar_csv("data/recetas.csv")
 
     opcion = None
     while opcion != "0":
@@ -38,7 +51,9 @@ def main():
         opcion = input("> ").strip()
         if opcion == "0":
             print("Chau.")
-        elif opcion in {"1", "2", "3", "4", "5", "6", "7", "8", "9"}:
+        elif opcion == "1":
+            listar_catalogo(recetas)
+        elif opcion in {"2", "3", "4", "5", "6", "7", "8", "9"}:
             pendiente()
         else:
             print("Opción inválida.")
