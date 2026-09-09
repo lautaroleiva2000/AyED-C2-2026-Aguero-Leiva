@@ -1,5 +1,5 @@
 from src.config import TEMA
-from src.persistencia.texto import cargar_csv
+from src.dominio.receta import CATALOGO
 
 TEMAS = {
     "pokedex": "Pokédex",
@@ -14,13 +14,13 @@ def listar_catalogo(recetas):
 
     for receta in recetas:
         print(
-            f'{receta["id"]}. {receta["nombre"]} - '
+            f'{receta["id"]:>3}. {receta["nombre"]} - '
             f'{receta["tiempo_min"]} min - '
-            f'Dificultad: {receta["dificultad"]} - '
-            f'Categoría: {receta["categoria"]}'
+            f'Dificultad: {receta["dificultad"]}'
         )
    
-
+def pendiente():
+    print("Todavía no está implementado. Completar en la entrega que corresponde.")
 
 def mostrar_menu():
     nombre = TEMAS.get(TEMA, TEMA or "(sin tema)")
@@ -43,7 +43,7 @@ def main():
         print("Seteá TEMA en src/config.py: 'pokedex', 'recetario' o 'musica'.")
         return
         
-    recetas = cargar_csv("data/recetas.csv")
+    recetas = CATALOGO
 
     opcion = None
     while opcion != "0":
