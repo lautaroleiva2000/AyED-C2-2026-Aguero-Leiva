@@ -1,18 +1,9 @@
-import csv
+def cargar_texto(ruta):
+    """Carga secuencial de un .txt: un registro por línea, separado por coma.
+    Devuelve una lista de dicts (E1 puede quedar así)."""
+    raise NotImplementedError
 
 
-def cargar_csv(ruta):
-    """Carga secuencial. Devuelve una lista de dicts (E1 puede quedar así)."""
-    filas = []
-
-    with open(ruta, "r", encoding="utf-8", newline="") as archivo:
-        lector = csv.DictReader(archivo)
-
-        for fila in lector:
-            filas.append(fila)
-
-    return filas
-
-
-def guardar_csv(ruta, filas, encabezados):
+def guardar_texto(ruta, filas, encabezados):
+    """Escribe el catálogo en .txt con la primera línea de encabezados."""
     raise NotImplementedError
