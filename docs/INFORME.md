@@ -5,25 +5,15 @@ Completar y hacer crecer en cada entrega. No hace falta prosa larga: oraciones c
 ## 1. Grupo y tema
 
 - Tema: Recetario
-- Por qué lo eligieron (5–8 líneas): Elegimos el tema Recetario porque nos pareció una opción sencilla de comprender
-y cercana a situaciones cotidianas. El sistema permite trabajar con distintas
-recetas y datos como su nombre, tiempo de preparación, dificultad y categoría.
-Además, consideramos que el tema permite aplicar de forma clara los contenidos
-que iremos viendo durante la materia. En esta primera entrega trabajamos con
-los datos proporcionados por la cátedra en archivos CSV y mostramos el catálogo
-de recetas desde el programa.
-
+- Por qué lo eligieron (5–8 líneas): Elegimos el tema Recetario porque nos pareció una opción sencilla de comprender y cercana a situaciones cotidianas. Nos resultó interesante trabajar con recetas porque permite organizar información concreta como el nombre, el tiempo de preparación y la dificultad. También consideramos que es un tema fácil de explicar y de relacionar con los distintos contenidos que iremos viendo durante la materia. En esta primera entrega armamos manualmente un catálogo de recetas dentro del código. A partir de este catálogo podemos comenzar a trabajar con estructuras de datos y luego ir incorporando nuevas funcionalidades en las próximas entregas. Elegimos este tema porque creemos que nos va a permitir aplicar los conceptos de la materia de una forma clara y ordenada.
+  
 ## 2. Modelo
 
-En esta primera entrega, cada receta se representa con los datos obtenidos
-del archivo recetas.csv: id, nombre, tiempo de preparación, dificultad y categoría.
+En esta primera entrega, cada receta se representa mediante un diccionario con los datos: id, nombre, tiempo de preparación y dificultad.
 
-El catálogo se guarda en una lista de Python, por lo que es una estructura mutable:
-se pueden agregar, eliminar o modificar elementos.
+El catálogo se guarda en una lista de Python, por lo que es una estructura mutable: se pueden agregar, eliminar o modificar elementos.
 
-Cada receta se carga actualmente como un diccionario, que también es mutable.
-Sin embargo, consideramos que el id identifica de manera única a una receta
-y no debería cambiar una vez asignado.
+Cada receta se representa mediante un diccionario, que también es mutable. En cambio, los valores utilizados como el id (entero) y los textos de nombre y dificultad (cadenas) son tipos inmutables. Consideramos además que el id identifica de manera única a una receta y no debería cambiar una vez asignado.
 
 ## 3. Recursión (E2)
 
