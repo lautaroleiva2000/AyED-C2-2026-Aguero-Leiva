@@ -43,7 +43,22 @@ def main():
         elif opcion == "1":
             print("\n=== RECETARIO ===")
             recetario.listar_catalogo()
-        elif opcion in {"2", "3", "4", "5", "6", "7", "8", "9"}:
+        elif opcion == "5":
+            id_texto = input("Ingresá el ID de la receta: ").strip()
+
+            if not id_texto.isdigit():
+                print("ID inválido.")
+            else:
+                id_receta = int(id_texto)
+                receta = recetario.buscar_receta(id_receta)
+
+                if receta is None:
+                    print("Receta no encontrada.")
+                else:
+                    resultado = recetario.desglosar_subrecetas(id_receta)
+                    print(f"Desglose de {receta.nombre}: {resultado}")
+
+        elif opcion in ("2", "3", "4", "6", "7", "8", "9"):
             pendiente()
         else:
             print("Opción inválida.")
