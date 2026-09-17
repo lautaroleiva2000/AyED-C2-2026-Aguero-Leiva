@@ -1,5 +1,5 @@
 from src.config import TEMA
-from src.dominio.receta import CATALOGO
+from src.dominio.recetario import Recetario
 
 TEMAS = {
     "pokedex": "Pokédex",
@@ -7,17 +7,6 @@ TEMAS = {
     "musica": "Biblioteca musical",
 }
 
-
-def listar_catalogo(recetas):
-    print()
-    print("=== RECETARIO ===")
-
-    for receta in recetas:
-        print(
-            f'{receta["id"]:>3}. {receta["nombre"]} - '
-            f'{receta["tiempo_min"]} min - '
-            f'Dificultad: {receta["dificultad"]}'
-        )
    
 def pendiente():
     print("Todavía no está implementado. Completar en la entrega que corresponde.")
@@ -43,7 +32,7 @@ def main():
         print("Seteá TEMA en src/config.py: 'pokedex', 'recetario' o 'musica'.")
         return
         
-    recetas = CATALOGO
+    recetario = Recetario()
 
     opcion = None
     while opcion != "0":
@@ -52,7 +41,8 @@ def main():
         if opcion == "0":
             print("Chau.")
         elif opcion == "1":
-            listar_catalogo(recetas)
+            print("\n=== RECETARIO ===")
+            recetario.listar_catalogo()
         elif opcion in {"2", "3", "4", "5", "6", "7", "8", "9"}:
             pendiente()
         else:
