@@ -17,10 +17,15 @@ Cada receta se representa mediante un diccionario, que también es mutable. En c
 
 ## 3. Recursión (E2)
 
-- Función:
-- Caso base:
-- Caso recursivo:
-- Traza de un ejemplo real del dataset:
+- **Función:** `desglosar_subrecetas(recetario, id_receta)`
+- **Caso base:** Si la receta no contiene sub-recetas (es una receta o ingrediente hoja), devuelve `[id_receta]`.
+- **Caso recursivo:** Si la receta tiene sub-recetas, devuelve `[id_receta] + desglosar_subrecetas(...)` para cada una de ellas.
+- **Traza de un ejemplo real del dataset:**
+  - **Datos del dataset:** La receta ID 10 (Empanadas de carne) utiliza la receta ID 3 (Sofrito) y la receta ID 5 (Masa de empanadas). Las recetas 3 y 5 no contienen sub-recetas.
+  - **Llamada 1:** `desglosar_subrecetas(10)` $\rightarrow$ Tiene sub-recetas: [3, 5]. Llama recursivamente a 3 y luego a 5.
+  - **Llamada 2:** `desglosar_subrecetas(3)` $\rightarrow$ NO tiene sub-recetas (**caso base**). Devuelve `[3]`.
+  - **Llamada 3:** `desglosar_subrecetas(5)` $\rightarrow$ NO tiene sub-recetas (**caso base**). Devuelve `[5]`.
+  - **Resultado final:** `[10, 3, 5]`
 
 ## 4. TADs (E3)
 
