@@ -1,17 +1,25 @@
-class Cola:
-    """TAD cola implementado sobre ListaEnlazada."""
+from src.tads.lista_enlazada import ListaEnlazada
+from src.excepciones import ColaVaciaError
 
+class Cola:
+    """Estructura FIFO (First In, First Out) sobre ListaEnlazada."""
     def __init__(self):
-        raise NotImplementedError
+        self._items = ListaEnlazada()
 
     def encolar(self, dato):
-        raise NotImplementedError
+        self._items.insertar_al_final(dato)
 
     def desencolar(self):
-        raise NotImplementedError
+        if self.esta_vacia():
+            raise ColaVaciaError("No hay elementos en la cola de preparación.")
+        frente = self.ver_frente()
+        self._items.eliminar(frente)
+        return frente
 
     def ver_frente(self):
-        raise NotImplementedError
+        if self.esta_vacia():
+            raise ColaVaciaError("La cola está vacía.")
+        return self._items._cabeza.dato
 
     def esta_vacia(self):
-        raise NotImplementedError
+        return self._items.esta_vacia()
