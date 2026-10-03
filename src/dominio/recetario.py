@@ -1,12 +1,14 @@
 from src.dominio.receta import Receta, CATALOGO
+from src.tads.lista_enlazada import ListaEnlazada
 
 
 class Recetario:
     def __init__(self):
-        self.recetas = []
+        self.recetas = ListaEnlazada()
+
         self.relaciones = {
             10: [3, 5]
-        }        
+        }
 
         for datos in CATALOGO:
             receta = Receta(
@@ -15,7 +17,10 @@ class Recetario:
                 datos["tiempo_min"],
                 datos["dificultad"]
             )
-            self.recetas.append(receta)
+            self.recetas.insertar_al_final(receta)
+
+    def __iter__(self):
+        return iter(self.recetas)
 
     def listar_catalogo(self):
         for receta in self.recetas:
@@ -27,9 +32,14 @@ class Recetario:
                 return receta
         return None
 
+    def buscar_por_nombre(self, nombre):
+        for receta in self.recetas:
+            if receta.nombre.lower() == nombre.lower():
+                return receta
+        return None
+
     def subrecetas(self, id_receta):
         return self.relaciones.get(id_receta, [])
-
 
     def desglosar_subrecetas(self, id_receta):
         sub = self.subrecetas(id_receta)
