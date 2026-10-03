@@ -1,4 +1,5 @@
-from src.dominio.libro_recetas import LibroRecetas
+from src.config import TEMA
+from src.dominio.recetario import Recetario
 from src.dominio.menu_semanal import MenuSemanal
 from src.tads.pila import Pila
 from src.tads.cola import Cola
@@ -6,87 +7,139 @@ from src.excepciones import (
     ColeccionLlenaError,
     PilaVaciaError,
     ColaVaciaError,
-    ItemNoEncontradoError
+    ItemNoEncontradoError,
 )
 
+TEMAS = {
+    "pokedex": "Pokédex",
+    "recetario": "Recetario",
+    "musica": "Biblioteca musical",
+}
+
+
+def pendiente():
+    print("Todavía no está implementado. Completar en la entrega que corresponde.")
+
+
 def mostrar_menu():
-    print("\n--- MENÚ PRINCIPAL: RECETARIO ---")
-    print("1. Ver catálogo de recetas")
-    print("2. Agregar receta al menú semanal (con tope)")
-    print("3. Listar menú semanal")
-    print("4. Deshacer última adición (Pila / Historial)")
-    print("5. Atender/Cocinar siguiente en cola (Cola de preparación)")
-    print("6. Ver desglose recursivo de receta")
+    nombre = TEMAS.get(TEMA, TEMA or "(sin tema)")
+    print()
+    print(f"=== {nombre} — AyED C2 2026 ===")
+    print("1. Listar catálogo")
+    print("2. Ver detalle")
+    print("3. Buscar")
+    print("4. Ordenar")
+    print("5. Operación recursiva")
+    print("6. Colección principal (menú semanal)")
+    print("7. Historial (pila / deshacer)")
+    print("8. Cola de preparación")
+    print("9. Guardar / cargar archivos")
     print("0. Salir")
 
+
+def gestionar_menu_semanal(recetario, menu_semanal, pila_historial, cola_preparacion):
+    print("\n=== MENÚ SEMANAL ===")
+    print("1. Agregar receta")
+    print("2. Listar menú semanal")
+    print("0. Volver")
+
+    opcion = input("> ").strip()
+
+    if opcion == "1":
+        nombre = input("Ingresá el nombre de la receta: ").strip()
+        receta = recetario.buscar_por_nombre(nombre)
+
+        if receta is None:
+            print("Receta no encontrada.")
+            return
+
+        try:
+            menu_semanal.agregar(receta)
+            pila_historial.apilar(receta)
+            cola_preparacion.encolar(receta)
+            print(f"Receta agregada: {receta.nombre}")
+        except ColeccionLlenaError as e:
+            print(f"Error: {e}")
+
+    elif opcion == "2":
+        if menu_semanal.esta_vacio():
+            print("El menú semanal está vacío.")
+        else:
+            for receta in menu_semanal:
+                print(receta.resumen())
+
+    elif opcion != "0":
+        print("Opción inválida.")
+
+
 def main():
-    libro = LibroRecetas()
+    if TEMA not in TEMAS:
+        print("Seteá TEMA en src/config.py: 'pokedex', 'recetario' o 'musica'.")
+        return
+
+    recetario = Recetario()
     menu_semanal = MenuSemanal(tope=6)
     pila_historial = Pila()
     cola_preparacion = Cola()
 
-    while True:
+    opcion = None
+    while opcion != "0":
         mostrar_menu()
-        opcion = input("Seleccione una opción: ").strip()
+        opcion = input("> ").strip()
 
         if opcion == "0":
-            print("¡Hasta luego!")
-            break
+            print("Chau.")
 
         elif opcion == "1":
-            print("\n--- CATÁLOGO DE RECETAS ---")
-            for receta in libro:
-                print(f"- {receta}")
+            print("\n=== RECETARIO ===")
+            recetario.listar_catalogo()
 
-        elif opcion == "2":
-            nombre = input("Ingrese el nombre de la receta a agregar: ").strip()
-            receta = libro.buscar(nombre)
-            if receta:
-                try:
-                    menu_semanal.agregar(receta)
-                    pila_historial.apilar(receta)
-                    cola_preparacion.encolar(receta)
-                    print(f"✓ Receta '{receta}' agregada con éxito al menú semanal.")
-                except ColeccionLlenaError as e:
-                    print(f"X Error: {e}")
+        elif opcion == "5":
+            id_texto = input("Ingresá el ID de la receta: ").strip()
+
+            if not id_texto.isdigit():
+                print("ID inválido.")
             else:
-                print("X No se encontró esa receta en el catálogo.")
+                id_receta = int(id_texto)
+                receta = recetario.buscar_receta(id_receta)
 
-        elif opcion == "3":
-            print("\n--- MI MENÚ SEMANAL ---")
-            if menu_semanal.esta_vacio():
-                print("El menú semanal está vacío.")
-            else:
-                for receta in menu_semanal:
-                    print(f"• {receta}")
+                if receta is None:
+                    print("Receta no encontrada.")
+                else:
+                    resultado = recetario.desglosar_subrecetas(id_receta)
+                    print(f"Desglose de {receta.nombre}: {resultado}")
 
-        elif opcion == "4":
+        elif opcion == "6":
+            gestionar_menu_semanal(
+                recetario,
+                menu_semanal,
+                pila_historial,
+                cola_preparacion,
+            )
+
+        elif opcion == "7":
             try:
                 receta_eliminada = pila_historial.desapilar()
                 menu_semanal.eliminar(receta_eliminada)
-                print(f"✓ Deshecho: Se eliminó '{receta_eliminada}' del menú semanal.")
+                print(f"Deshecho: se eliminó {receta_eliminada.nombre} del menú semanal.")
             except PilaVaciaError as e:
-                print(f"X Error: {e}")
+                print(f"Error: {e}")
             except ItemNoEncontradoError as e:
-                print(f"X Error: {e}")
+                print(f"Error: {e}")
 
-        elif opcion == "5":
+        elif opcion == "8":
             try:
                 receta_a_cocinar = cola_preparacion.desencolar()
-                print(f"✓ En preparación/Cocinando ahora: '{receta_a_cocinar}'")
+                print(f"En preparación: {receta_a_cocinar.nombre}")
             except ColaVaciaError as e:
-                print(f"X Error: {e}")
+                print(f"Error: {e}")
 
-        elif opcion == "6":
-            nombre = input("Ingrese la receta para ver su desglose: ").strip()
-            receta = libro.buscar(nombre)
-            if receta and hasattr(receta, "desglosar"):
-                print(receta.desglosar())
-            else:
-                print("X No se encontró la receta o no tiene desglose disponible.")
+        elif opcion in ("2", "3", "4", "9"):
+            pendiente()
 
         else:
-            print("Opción no válida. Intente nuevamente.")
+            print("Opción inválida.")
+
 
 if __name__ == "__main__":
     main()
