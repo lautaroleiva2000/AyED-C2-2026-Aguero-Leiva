@@ -1,10 +1,25 @@
-# PROTOCOLO DE PRUEBAS
+# Protocolo de pruebas
 
-## Casos de Prueba - Entrega 3 (E3)
+Pruebas **manuales**. Cada fila es un caso. Ejecutar sobre el tag que entregan.
 
-| ID | Área / Función | Acción realizada | Resultado esperado | Resultado obtenido | Estado |
-| :--- | :--- | :--- | :--- | :--- | :--- |
-| **P05** | Colección con Tope | Agregar recetas hasta superar el límite de 6. | Debe lanzar `ColeccionLlenaError` y bloquear el ingreso de la 7ma receta. | Se captura la excepción y se muestra el mensaje de error correspondiente. | **PASA** |
-| **P06** | Historial (Pila LIFO) | Intentar deshacer cuando el historial está vacío. | Debe lanzar `PilaVaciaError`. | Se captura la excepción en el menú y no rompe la ejecución. | **PASA** |
-| **P07** | Cola de Espera (FIFO) | Intentar desatender/cocinar de la cola de preparación vacía. | Debe lanzar `ColaVaciaError`. | Se captura la excepción en el menú y muestra el mensaje indicativo. | **PASA** |
-| **P08** | Iterador en Lista | Recorrer el catálogo y el menú semanal con bucle `for`. | Los elementos se muestran en el orden correcto utilizando `__iter__`. | Se recorre correctamente sin acceder a atributos privados de los nodos. | **PASA** |
+Leyenda de resultado: `pasa` / `no pasa` / `no corrido`.
+
+Mínimos: 8 casos escritos en E2; ejecutados en E3; 15 de regresión en E6 (pila, cola, archivos, recursión, búsquedas).
+
+| ID | Entrega | Acción (pasos en el CLI) | Datos | Resultado esperado | Resultado | Notas |
+| --- | --- | --- | --- | --- | --- | --- |
+| P01 | E1 | Arrancar el programa y listar catálogo | dataset inicial | lista no vacía, sin traceback | no corrido | Prueba de regresión de E1 |
+| P02 | E1 | Buscar un ítem inexistente | id = -1 | mensaje claro, el menú sigue | no corrido | Prueba de regresión |
+| P03 | E2 | Operación recursiva sobre receta CON sub-recetas | id = 10 (Empanadas de carne) | devuelve la cadena completa `[10, 3, 5]` | no corrido | Prueba de regresión de E2 |
+| P04 | E2 | Operación recursiva sobre receta SIN sub-recetas | id = 3 (Sofrito) | devuelve solamente `[3]` (caso base) | no corrido | Prueba de regresión de E2 |
+| P05 | E3 | Agregar recetas a la colección principal hasta superar el tope | menú semanal con tope = 6 | al intentar agregar la 7ma receta lanza `ColeccionLlenaError` y no supera el límite | no corrido | Colección principal sobre `ListaEnlazada` |
+| P06 | E3 | Intentar deshacer cuando el historial está vacío | pila vacía | lanza `PilaVaciaError`, el menú captura la excepción y continúa funcionando | no corrido | Pila LIFO sobre `ListaEnlazada` |
+| P07 | E3 | Intentar cocinar/desencolar con la cola de preparación vacía | cola vacía | lanza `ColaVaciaError`, el menú captura la excepción y continúa funcionando | no corrido | Cola FIFO sobre `ListaEnlazada` |
+| P08 | E3 | Recorrer el catálogo y el menú semanal mediante `for` | recetas cargadas | los elementos aparecen en el orden correcto usando el iterador, sin acceder directamente a `_cabeza` | no corrido | Verificar `__iter__` |
+| P09 | E4 | Búsqueda lineal de un nombre que existe | | lo encuentra | no corrido | |
+| P10 | E4 | Búsqueda lineal de un nombre que no existe | | no encontrado, sin traceback | no corrido | |
+| P11 | E4 | Búsqueda binaria con catálogo desordenado | | avisa o reordena; no da un falso hit | no corrido | |
+| P12 | E4 | Ordenar por un criterio y después por otro | | el orden cambia | no corrido | |
+| P13 | E5 | Guardar CSV, salir, volver a entrar | | los datos siguen | no corrido | |
+| P14 | E5 | Guardar binario y modificar un registro por id | | al recargar, ese campo cambió | no corrido | |
+| P15 | E5 | Abrir un binario truncado o con magia mala | archivo basura | excepción de archivo inválido | no corrido | |
