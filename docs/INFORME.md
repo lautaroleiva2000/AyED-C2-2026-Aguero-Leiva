@@ -41,7 +41,7 @@ Las relaciones entre recetas se utilizan para representar las sub-recetas necesa
 |---|---|---|---|---|
 | **ListaEnlazada** | `insertar_al_inicio(dato)` | Inserta un nuevo nodo al inicio de la lista. | O(1) | `self._tamanio` refleja el conteo exacto de nodos. |
 
-## §5. Complejidad y Mediciones (Entrega 4)
+## 5. Complejidad y Mediciones (Entrega 4)
 
 ### 1. Tabla de Complejidad de las Operaciones
 | Operación | Tiempo | Espacio | Por qué |
