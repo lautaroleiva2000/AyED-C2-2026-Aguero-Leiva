@@ -2,6 +2,7 @@ from src.config import TEMA
 from src.dominio.recetario import Recetario
 from src.dominio.menu_semanal import MenuSemanal
 from src.algoritmos.busqueda import busqueda_lineal
+from src.algoritmos.ordenamiento import ordenar_seleccion, ordenar_insercion
 from src.tads.pila import Pila
 from src.tads.cola import Cola
 from src.excepciones import (
@@ -149,8 +150,31 @@ def main():
             else:
                 print("Receta encontrada:")
                 print(receta.resumen())
+
+        elif opcion == "4":
+            print("\n=== ORDENAR RECETARIO ===")
+            print("1. Selección por nombre")
+            print("2. Inserción por tiempo de preparación")
+
+            opcion_orden = input("> ").strip()
+            recetas = list(recetario)
+
+            if opcion_orden == "1":
+                ordenar_seleccion(recetas, lambda receta: receta.nombre.lower())
+                print("\nRecetas ordenadas por nombre:")
+                for receta in recetas:
+                    print(receta.resumen())
+
+            elif opcion_orden == "2":
+                ordenar_insercion(recetas, lambda receta: receta.tiempo_min)
+                print("\nRecetas ordenadas por tiempo:")
+                for receta in recetas:
+                    print(receta.resumen())
+
+            else:
+                print("Opción inválida.")
         
-        elif opcion in ("2", "4", "9"):
+        elif opcion in ("2", "9"):
             pendiente()
 
         else:
