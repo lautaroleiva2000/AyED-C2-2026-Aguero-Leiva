@@ -1,7 +1,7 @@
 from src.config import TEMA
 from src.dominio.recetario import Recetario
 from src.dominio.menu_semanal import MenuSemanal
-from src.algoritmos.busqueda import busqueda_lineal
+from src.algoritmos.busqueda import busqueda_lineal, busqueda_binaria
 from src.algoritmos.ordenamiento import ordenar_seleccion, ordenar_insercion
 from src.tads.pila import Pila
 from src.tads.cola import Cola
@@ -137,19 +137,45 @@ def main():
                 print(f"Error: {e}")
 
         elif opcion == "3":
-            nombre = input("Ingresá el nombre de la receta a buscar: ").strip()
+            print("\n=== BUSCAR RECETA ===")
+            print("1. Búsqueda lineal")
+            print("2. Búsqueda binaria")
 
-            receta = busqueda_lineal(
-                recetario,
-                nombre.lower(),
-                lambda receta: receta.nombre.lower(),
-            )
+            tipo_busqueda = input("> ").strip()
+            nombre = input("Ingresá el nombre de la receta a buscar: ").strip().lower()
 
-            if receta is None:
-                print("Receta no encontrada.")
+            if tipo_busqueda == "1":
+                receta = busqueda_lineal(
+                    recetario,
+                    nombre,
+                    lambda receta: receta.nombre.lower(),
+                )
+
+            elif tipo_busqueda == "2":
+                recetas = list(recetario)
+
+                print("Para usar búsqueda binaria, se ordenará primero el catálogo por nombre.")
+                ordenar_insercion(
+                    recetas,
+                    lambda receta: receta.nombre.lower(),
+                )
+
+                receta = busqueda_binaria(
+                    recetas,
+                    nombre,
+                    lambda receta: receta.nombre.lower(),
+                )
+
             else:
-                print("Receta encontrada:")
-                print(receta.resumen())
+                print("Opción inválida.")
+                receta = None
+
+            if tipo_busqueda in ("1", "2"):
+                if receta is None:
+                    print("Receta no encontrada.")
+                else:
+                    print("Receta encontrada:")
+                    print(receta.resumen())
 
         elif opcion == "4":
             print("\n=== ORDENAR RECETARIO ===")
