@@ -1,6 +1,7 @@
 from src.config import TEMA
 from src.dominio.recetario import Recetario
 from src.dominio.menu_semanal import MenuSemanal
+from src.algoritmos.busqueda import busqueda_lineal
 from src.tads.pila import Pila
 from src.tads.cola import Cola
 from src.excepciones import (
@@ -134,7 +135,22 @@ def main():
             except ColaVaciaError as e:
                 print(f"Error: {e}")
 
-        elif opcion in ("2", "3", "4", "9"):
+        elif opcion == "3":
+            nombre = input("Ingresá el nombre de la receta a buscar: ").strip()
+
+            receta = busqueda_lineal(
+                recetario,
+                nombre.lower(),
+                lambda receta: receta.nombre.lower(),
+            )
+
+            if receta is None:
+                print("Receta no encontrada.")
+            else:
+                print("Receta encontrada:")
+                print(receta.resumen())
+        
+        elif opcion in ("2", "4", "9"):
             pendiente()
 
         else:
