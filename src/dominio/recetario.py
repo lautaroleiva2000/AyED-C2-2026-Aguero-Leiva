@@ -9,6 +9,8 @@ class Recetario:
         self.relaciones = {
             10: [3, 5]
         }
+    def tamanio(self):
+        return self.recetas.tamanio()    
 
         for datos in CATALOGO:
             receta = Receta(
@@ -53,3 +55,6 @@ class Recetario:
             resultado += self.desglosar_subrecetas(s)
 
         return resultado
+
+    def insertar_al_final(self, receta):
+        self.recetas.insertar_al_final(receta)

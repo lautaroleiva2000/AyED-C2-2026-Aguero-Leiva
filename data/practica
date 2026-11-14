@@ -1,0 +1,10 @@
+def sumar(a, b):
+    return a + b
+
+print(sumar(3, 5))
+
+def total_donas(a, b):
+    total = 0
+
+    for i in range(b):
+        total += 

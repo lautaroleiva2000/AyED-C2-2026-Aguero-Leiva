@@ -1,15 +1,20 @@
+from pathlib import Path
 from src.config import TEMA
 from src.dominio.recetario import Recetario
+from src.dominio.receta import Receta
 from src.dominio.menu_semanal import MenuSemanal
 from src.algoritmos.busqueda import busqueda_lineal, busqueda_binaria
 from src.algoritmos.ordenamiento import ordenar_seleccion, ordenar_insercion
 from src.tads.pila import Pila
 from src.tads.cola import Cola
+from src.persistencia.texto import cargar_texto, guardar_texto
+from src.persistencia.binario import guardar_binario, cargar_binario
 from src.excepciones import (
     ColeccionLlenaError,
     PilaVaciaError,
     ColaVaciaError,
     ItemNoEncontradoError,
+    ArchivoInvalidoError,
 )
 
 TEMAS = {
@@ -17,6 +22,24 @@ TEMAS = {
     "recetario": "Recetario",
     "musica": "Biblioteca musical",
 }
+
+RAIZ = Path(__file__).resolve().parents[1]
+DATA = RAIZ / "data"
+RUTA_TXT = DATA / "recetas.txt"
+RUTA_BIN = DATA / "recetas.bin"
+ENCABEZADOS = ["id", "nombre", "tiempo_min", "dificultad", "categoria"]
+
+def filas_del_catalogo(catalogo):
+    filas = []
+    for r in catalogo:
+        filas.append({
+            "id": r.id,
+            "nombre": r.nombre,
+            "tiempo_min": r.tiempo_min,
+            "dificultad": r.dificultad,
+            "categoria": r.categoria,
+        })
+    return filas
 
 
 def pendiente():
@@ -200,8 +223,42 @@ def main():
             else:
                 print("Opción inválida.")
         
-        elif opcion in ("2", "9"):
+        elif opcion == "2":
             pendiente()
+
+        elif opcion == "9":
+            print("\n=== GESTIÓN DE ARCHIVOS ===")
+            print("a) Cargar catálogo desde el .txt de la cátedra")
+            print("b) Guardar catálogo en .txt")
+            print("c) Guardar catálogo en binario (.bin)")
+            print("d) Cargar catálogo desde binario (.bin)")
+            sub = input("Subopción > ").strip().lower()
+            try:
+                if sub == "a":
+                    filas = cargar_texto(RUTA_TXT)
+                    recetario = Recetario()
+                    for fila in filas:
+                        receta = Receta(
+                            int(fila["id"]),
+                            fila["nombre"],
+                            int(fila["tiempo_min"]),
+                            fila["dificultad"],
+                        )
+                        recetario.insertar_al_final(receta)
+                    print(f"Catálogo cargado desde .txt: {recetario.tamanio()} ítems.")
+                elif sub == "b":
+                    guardar_texto(RUTA_TXT, filas_del_catalogo(recetario), ENCABEZADOS)
+                    print("Catálogo guardado en .txt.")
+                elif sub == "c":
+                    guardar_binario(RUTA_BIN, recetario)
+                    print("Catálogo guardado en .bin.")
+                elif sub == "d":
+                    recetario = cargar_binario(RUTA_BIN)
+                    print(f"Catálogo cargado desde .bin: {recetario.tamanio()} ítems.")
+                else:
+                    print("Subopción inválida.")
+            except ArchivoInvalidoError as error:
+                print(f"Archivo inválido: {error}")
 
         else:
             print("Opción inválida.")
