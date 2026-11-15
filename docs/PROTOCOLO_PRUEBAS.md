@@ -20,6 +20,6 @@ Mínimos: 8 casos escritos en E2; ejecutados en E3; 15 de regresión en E6 (pila
 | P10 | E4 | Búsqueda lineal de un nombre que no existe | | no encontrado, sin traceback | pasa | |
 | P11 | E4 | Búsqueda binaria con catálogo desordenado | | avisa o reordena; no da un falso hit | pasa | |
 | P12 | E4 | Ordenar por un criterio y después por otro | | el orden cambia | pasa | |
-| P13 | E5 | Guardar CSV, salir, volver a entrar | | los datos siguen | no corrido | |
-| P14 | E5 | Guardar binario y modificar un registro por id | | al recargar, ese campo cambió | no corrido | |
-| P15 | E5 | Abrir un binario truncado o con magia mala | archivo basura | excepción de archivo inválido | no corrido | |
+| P13 | E5 | Dar de alta una receta, guardar en .txt, salir y volver a entrar | receta de prueba id = 99 | la receta sigue disponible después de reiniciar | pasa | Se verificó persistencia en texto cerrando y volviendo a ejecutar el programa |
+| P14 | E5 | Guardar binario, modificar una receta por id y recargar desde binario | id = 99 | al recargar, aparecen los datos modificados | pasa | La modificación persistió usando actualización directa por posición |
+| P15 | E5 | Intentar cargar archivos inválidos | binario truncado, magia incorrecta y .txt con cantidad incorrecta de campos | muestra ArchivoInvalidoError sin traceback y el menú continúa | pasa | Se probaron los tres casos y el programa continuó funcionando |
