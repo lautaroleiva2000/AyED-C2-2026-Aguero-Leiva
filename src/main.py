@@ -107,7 +107,7 @@ def main():
         recetario = Recetario(cargar_catalogo=False)
 
         for fila in filas:
-             receta = Receta(
+            receta = Receta(
                 int(fila["id"]),
                 fila["nombre"],
                 int(fila["tiempo_min"]),
