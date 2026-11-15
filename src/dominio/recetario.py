@@ -60,3 +60,12 @@ class Recetario:
 
     def insertar_al_final(self, receta):
         self.recetas.insertar_al_final(receta)
+
+    def posicion_del_id(self, id_receta):
+        for posicion, receta in enumerate(self.recetas):
+            if receta.id == id_receta:
+                return posicion
+        return None
+
+    def eliminar_receta(self, receta):
+        self.recetas.eliminar(receta)
