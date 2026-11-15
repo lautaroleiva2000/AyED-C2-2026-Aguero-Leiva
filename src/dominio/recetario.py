@@ -3,23 +3,25 @@ from src.tads.lista_enlazada import ListaEnlazada
 
 
 class Recetario:
-    def __init__(self):
+    def __init__(self, cargar_catalogo=True):
         self.recetas = ListaEnlazada()
 
         self.relaciones = {
             10: [3, 5]
         }
-    def tamanio(self):
-        return self.recetas.tamanio()    
 
-        for datos in CATALOGO:
-            receta = Receta(
-                datos["id"],
-                datos["nombre"],
-                datos["tiempo_min"],
-                datos["dificultad"]
-            )
-            self.recetas.insertar_al_final(receta)
+        if cargar_catalogo:
+            for datos in CATALOGO:
+                receta = Receta(
+                    datos["id"],
+                    datos["nombre"],
+                    datos["tiempo_min"],
+                    datos["dificultad"]
+                )
+                self.recetas.insertar_al_final(receta)
+
+    def tamanio(self):
+        return self.recetas.tamanio()
 
     def __iter__(self):
         return iter(self.recetas)
