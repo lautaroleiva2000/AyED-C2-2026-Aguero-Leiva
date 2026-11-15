@@ -8,7 +8,13 @@ from src.algoritmos.ordenamiento import ordenar_seleccion, ordenar_insercion
 from src.tads.pila import Pila
 from src.tads.cola import Cola
 from src.persistencia.texto import cargar_texto, guardar_texto
-from src.persistencia.binario import guardar_binario, cargar_binario
+from src.persistencia.binario import (
+    guardar_binario,
+    cargar_binario,
+    actualizar_registro,
+    alta_binario,
+    baja_binario,
+)
 from src.excepciones import (
     ColeccionLlenaError,
     PilaVaciaError,
@@ -63,9 +69,12 @@ def mostrar_menu():
 
 
 def gestionar_menu_semanal(recetario, menu_semanal, pila_historial, cola_preparacion):
-    print("\n=== MENÚ SEMANAL ===")
-    print("1. Agregar receta")
+    print("\n=== COLECCIÓN PRINCIPAL / MENÚ SEMANAL ===")
+    print("1. Agregar receta al menú semanal")
     print("2. Listar menú semanal")
+    print("3. Alta de receta en el catálogo")
+    print("4. Modificar receta del catálogo")
+    print("5. Eliminar receta del catálogo")
     print("0. Volver")
 
     opcion = input("> ").strip()
@@ -93,9 +102,146 @@ def gestionar_menu_semanal(recetario, menu_semanal, pila_historial, cola_prepara
             for receta in menu_semanal:
                 print(receta.resumen())
 
+    elif opcion == "3":
+        print("\n=== ALTA DE RECETA ===")
+
+        id_texto = input("ID: ").strip()
+
+        if not id_texto.isdigit():
+            print("ID inválido.")
+            return
+
+        id_receta = int(id_texto)
+
+        if recetario.buscar_receta(id_receta) is not None:
+            print("Ya existe una receta con ese ID.")
+            return
+
+        nombre = input("Nombre: ").strip()
+        tiempo_texto = input("Tiempo en minutos: ").strip()
+        dificultad = input("Dificultad: ").strip()
+        categoria = input("Categoría: ").strip()
+
+        if not tiempo_texto.isdigit():
+            print("Tiempo inválido.")
+            return
+
+        nueva_receta = Receta(
+            id_receta,
+            nombre,
+            int(tiempo_texto),
+            dificultad,
+            categoria,
+        )
+
+        try:
+            guardar_binario(RUTA_BIN, recetario)
+
+            recetario.insertar_al_final(nueva_receta)
+            alta_binario(RUTA_BIN, nueva_receta)
+
+            guardar_texto(
+                RUTA_TXT,
+                filas_del_catalogo(recetario),
+                ENCABEZADOS,
+            )
+
+            print("Receta agregada y guardada correctamente.")
+
+        except ArchivoInvalidoError as error:
+            print(f"Error de persistencia: {error}")
+
+    elif opcion == "4":
+        print("\n=== MODIFICAR RECETA ===")
+
+        id_texto = input("ID de la receta a modificar: ").strip()
+
+        if not id_texto.isdigit():
+            print("ID inválido.")
+            return
+
+        id_receta = int(id_texto)
+        receta = recetario.buscar_receta(id_receta)
+
+        if receta is None:
+            print("Receta no encontrada.")
+            return
+
+        posicion = recetario.posicion_del_id(id_receta)
+
+        print(f"Receta actual: {receta.resumen()}")
+
+        nombre = input("Nuevo nombre: ").strip()
+        tiempo_texto = input("Nuevo tiempo en minutos: ").strip()
+        dificultad = input("Nueva dificultad: ").strip()
+        categoria = input("Nueva categoría: ").strip()
+
+        if not tiempo_texto.isdigit():
+            print("Tiempo inválido.")
+            return
+
+        try:
+            guardar_binario(RUTA_BIN, recetario)
+
+            receta.nombre = nombre
+            receta.tiempo_min = int(tiempo_texto)
+            receta.dificultad = dificultad
+            receta.categoria = categoria
+
+            actualizar_registro(
+                RUTA_BIN,
+                posicion,
+                receta,
+            )
+
+            guardar_texto(
+                RUTA_TXT,
+                filas_del_catalogo(recetario),
+                ENCABEZADOS,
+            )
+
+            print("Receta modificada y guardada correctamente.")
+
+        except ArchivoInvalidoError as error:
+            print(f"Error de persistencia: {error}")
+
+    elif opcion == "5":
+        print("\n=== ELIMINAR RECETA ===")
+
+        id_texto = input("ID de la receta a eliminar: ").strip()
+
+        if not id_texto.isdigit():
+            print("ID inválido.")
+            return
+
+        id_receta = int(id_texto)
+        receta = recetario.buscar_receta(id_receta)
+
+        if receta is None:
+            print("Receta no encontrada.")
+            return
+
+        posicion = recetario.posicion_del_id(id_receta)
+
+        try:
+            guardar_binario(RUTA_BIN, recetario)
+
+            recetario.eliminar_receta(receta)
+            baja_binario(RUTA_BIN, posicion)
+
+            guardar_texto(
+                RUTA_TXT,
+                filas_del_catalogo(recetario),
+                ENCABEZADOS,
+            )
+
+            print("Receta eliminada y cambios guardados correctamente.")
+
+        except ArchivoInvalidoError as error:
+            print(f"Error de persistencia: {error}")
+
     elif opcion != "0":
         print("Opción inválida.")
-
 
 def main():
     if TEMA not in TEMAS:
