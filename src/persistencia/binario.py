@@ -140,3 +140,77 @@ def actualizar_registro(ruta, posicion, item):
         raise ArchivoInvalidoError(
             f"No se pudo actualizar el archivo: {error}"
         )
+
+def alta_binario(ruta, item):
+    """Agrega un registro al final y actualiza la cantidad del header."""
+    try:
+        with open(ruta, "r+b") as archivo:
+            cabecera = archivo.read(HEADER.size)
+
+            if len(cabecera) != HEADER.size:
+                raise ArchivoInvalidoError(
+                    "Binario truncado: header incompleto."
+                )
+
+            magia, tema, cantidad = HEADER.unpack(cabecera)
+
+            archivo.seek(0, 2)
+            archivo.write(
+                FORMATO.pack(*_item_a_tupla(item))
+            )
+
+            archivo.seek(0)
+            archivo.write(
+                HEADER.pack(magia, tema, cantidad + 1)
+            )
+
+    except OSError as error:
+        raise ArchivoInvalidoError(
+            f"No se pudo agregar el registro: {error}"
+        )
+
+
+def baja_binario(ruta, posicion):
+    """Elimina un registro por posición y reescribe el archivo."""
+    if posicion < 0:
+        raise ArchivoInvalidoError(
+            "La posición no puede ser negativa."
+        )
+
+    try:
+        with open(ruta, "r+b") as archivo:
+            cabecera = archivo.read(HEADER.size)
+
+            if len(cabecera) != HEADER.size:
+                raise ArchivoInvalidoError(
+                    "Binario truncado: header incompleto."
+                )
+
+            magia, tema, cantidad = HEADER.unpack(cabecera)
+
+            if posicion >= cantidad:
+                raise ArchivoInvalidoError(
+                    "La posición indicada no existe."
+                )
+
+            registros = [
+                archivo.read(FORMATO.size)
+                for _ in range(cantidad)
+            ]
+
+            del registros[posicion]
+
+            archivo.seek(0)
+            archivo.truncate()
+
+            archivo.write(
+                HEADER.pack(magia, tema, len(registros))
+            )
+
+            for datos in registros:
+                archivo.write(datos)
+
+    except OSError as error:
+        raise ArchivoInvalidoError(
+            f"No se pudo eliminar el registro: {error}"
+        )
