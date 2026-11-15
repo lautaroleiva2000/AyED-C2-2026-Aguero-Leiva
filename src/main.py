@@ -236,13 +236,14 @@ def main():
             try:
                 if sub == "a":
                     filas = cargar_texto(RUTA_TXT)
-                    recetario = Recetario()
+                    recetario = Recetario(cargar_catalogo=False)
                     for fila in filas:
                         receta = Receta(
                             int(fila["id"]),
                             fila["nombre"],
                             int(fila["tiempo_min"]),
                             fila["dificultad"],
+                            fila["categoria"],
                         )
                         recetario.insertar_al_final(receta)
                     print(f"Catálogo cargado desde .txt: {recetario.tamanio()} ítems.")
