@@ -9,7 +9,7 @@ Completar y hacer crecer en cada entrega. No hace falta prosa larga: oraciones c
 
 ## 2. Modelo
 
-Cada receta se representa mediante un objeto de la clase `Receta`, con los datos: id, nombre, tiempo de preparación y dificultad.
+Cada receta se representa mediante un objeto de la clase `Receta`, con los datos: id, nombre, tiempo de preparación, dificultad y categoría.
 
 En la primera entrega el catálogo se había armado utilizando una lista de Python. A partir de la Entrega 3, el catálogo del `Recetario` utiliza una `ListaEnlazada` propia, implementada mediante nodos y referencias al siguiente elemento.
 
