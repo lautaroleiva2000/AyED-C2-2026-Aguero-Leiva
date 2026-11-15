@@ -78,3 +78,42 @@ Para la búsqueda lineal se utilizó una receta inexistente, obligando al algori
 Al aumentar el tamaño del dataset de 5 a 500 elementos, la búsqueda lineal aumenta claramente su tiempo porque puede necesitar recorrer toda la colección. En cambio, la búsqueda binaria presenta un aumento mucho menor porque en cada paso descarta aproximadamente la mitad de los elementos.
 
 Los ordenamientos por selección e inserción muestran un crecimiento mucho mayor al aumentar el tamaño de la entrada, consistente con su comportamiento cuadrático en el peor caso. Las mediciones reales pueden variar según el equipo y la ejecución, pero permiten observar la diferencia entre los distintos órdenes de complejidad.
+
+## 6. Persistencia (Entrega 5)
+
+En la Entrega 5 se incorporó persistencia del catálogo tanto en formato de texto simple (`.txt`) como en formato binario (`.bin`). El catálogo se carga desde `data/recetas.txt` al iniciar el programa, permitiendo conservar los cambios realizados entre distintas ejecuciones.
+
+El archivo de texto utiliza los campos:
+
+`id,nombre,tiempo_min,dificultad,categoria`
+
+Para la persistencia binaria se utiliza `struct` con registros de longitud fija.
+
+- **Formato del registro:** `struct.Struct("<I 30s H 10s 15s")`
+- **Tamaño de cada registro:** 61 bytes.
+- **Campos:**
+  - `id`: entero sin signo de 4 bytes.
+  - `nombre`: cadena de 30 bytes.
+  - `tiempo_min`: entero sin signo de 2 bytes.
+  - `dificultad`: cadena de 10 bytes.
+  - `categoria`: cadena de 15 bytes.
+
+El archivo binario comienza con un encabezado:
+
+- **Formato del header:** `struct.Struct("<4s 1s I")`
+- **Tamaño:** 9 bytes.
+- **Magia:** `AYED`.
+- **Tema:** `R`, correspondiente a Recetario.
+- **Cantidad:** número de registros almacenados.
+
+La modificación de un registro existente se realiza mediante acceso directo utilizando:
+
+`seek(HEADER.size + posicion * FORMATO.size)`
+
+De esta manera se accede directamente a la posición del registro y se sobrescribe únicamente ese registro.
+
+El alta agrega un nuevo registro al final del archivo binario y actualiza la cantidad almacenada en el encabezado. La baja elimina el registro correspondiente y reescribe el archivo, ya que los registros posteriores deben desplazarse para evitar dejar un espacio vacío.
+
+También se implementó manejo de `ArchivoInvalidoError` para archivos truncados, archivos con una magia incorrecta y archivos de texto con una cantidad inválida de campos. En estos casos el programa muestra un mensaje claro y continúa funcionando sin finalizar con un traceback.
+
+Se realizaron las pruebas P13, P14 y P15. Se verificó la persistencia de altas y modificaciones después de cerrar y volver a ejecutar el programa, la actualización directa de un registro binario por posición y el manejo controlado de archivos inválidos.
