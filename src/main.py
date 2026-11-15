@@ -102,7 +102,23 @@ def main():
         print("Seteá TEMA en src/config.py: 'pokedex', 'recetario' o 'musica'.")
         return
 
-    recetario = Recetario()
+    try:
+        filas = cargar_texto(RUTA_TXT)
+        recetario = Recetario(cargar_catalogo=False)
+
+        for fila in filas:
+             receta = Receta(
+                int(fila["id"]),
+                fila["nombre"],
+                int(fila["tiempo_min"]),
+                fila["dificultad"],
+                fila["categoria"],
+            )
+            recetario.insertar_al_final(receta)
+
+    except ArchivoInvalidoError as error:
+        print(f"No se pudo cargar el catálogo: {error}")
+        recetario = Recetario()
     menu_semanal = MenuSemanal(tope=6)
     pila_historial = Pila()
     cola_preparacion = Cola()
