@@ -48,8 +48,7 @@ def filas_del_catalogo(catalogo):
     return filas
 
 
-def pendiente():
-    print("Todavía no está implementado. Completar en la entrega que corresponde.")
+
 
 
 def mostrar_menu():
