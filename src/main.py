@@ -386,7 +386,26 @@ def main():
                 print("Opción inválida.")
         
         elif opcion == "2":
-            pendiente()
+            print("\n=== DETALLE DE RECETA ===")
+
+            id_texto = input("Ingresá el ID de la receta: ").strip()
+
+            try:
+                id_receta = int(id_texto)
+            except ValueError:
+                print("ID inválido.")
+                continue
+
+            receta = recetario.buscar_receta(id_receta)
+    
+            if receta is None:
+                print("Receta no encontrada.")
+            else:
+                print(f"ID: {receta.id}")
+                print(f"Nombre: {receta.nombre}")
+                print(f"Tiempo de preparación: {receta.tiempo_min} min")
+                print(f"Dificultad: {receta.dificultad}")
+                print(f"Categoría: {receta.categoria}")
 
         elif opcion == "9":
             print("\n=== GESTIÓN DE ARCHIVOS ===")
