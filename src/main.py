@@ -46,11 +46,7 @@ def filas_del_catalogo(catalogo):
             "categoria": r.categoria,
         })
     return filas
-
-
-
-
-
+    
 def mostrar_menu():
     nombre = TEMAS.get(TEMA, TEMA or "(sin tema)")
     print()
