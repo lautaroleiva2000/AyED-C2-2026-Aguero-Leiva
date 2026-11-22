@@ -117,3 +117,13 @@ El alta agrega un nuevo registro al final del archivo binario y actualiza la can
 También se implementó manejo de `ArchivoInvalidoError` para archivos truncados, archivos con una magia incorrecta y archivos de texto con una cantidad inválida de campos. En estos casos el programa muestra un mensaje claro y continúa funcionando sin finalizar con un traceback.
 
 Se realizaron las pruebas P13, P14 y P15. Se verificó la persistencia de altas y modificaciones después de cerrar y volver a ejecutar el programa, la actualización directa de un registro binario por posición y el manejo controlado de archivos inválidos.
+
+## 7. Reparto de trabajo
+
+El trabajo se realizó de manera grupal entre Luciana Agüero y Lautaro Leiva. A lo largo de las distintas entregas se fueron repartiendo tareas de implementación, revisión, pruebas, documentación e integración del proyecto.
+
+- **Luciana Agüero:** participó principalmente en la implementación inicial de distintas partes del programa, incluyendo estructuras de datos y funciones desarrolladas durante las entregas. También trabajó sobre partes de la persistencia de archivos y colaboró con la documentación del proyecto.
+
+- **Lautaro Leiva:** trabajó principalmente en la revisión e integración del código entre las distintas entregas, corrección de errores, ejecución de pruebas manuales, actualización de la documentación y organización del repositorio y las entregas en GitHub.
+
+Aunque hubo una división de tareas, ambos integrantes revisaron el funcionamiento general del Recetario y conocen la estructura del programa. Los dos pueden explicar el funcionamiento del catálogo, la colección principal, la recursión, la lista enlazada, la pila, la cola, los algoritmos de búsqueda y ordenamiento y la persistencia en texto y binario.
