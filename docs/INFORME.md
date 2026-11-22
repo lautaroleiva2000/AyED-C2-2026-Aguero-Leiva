@@ -4,18 +4,32 @@ Completar y hacer crecer en cada entrega. No hace falta prosa larga: oraciones c
 
 ## 1. Grupo y tema
 
-- **Tema:** Recetario
+- **Integrantes:** Luciana Agüero y Lautaro Leiva.
+- **Tema:** Recetario.
 - **Por qué lo eligieron:** Elegimos el tema Recetario porque nos pareció una opción sencilla de comprender y cercana a situaciones cotidianas. Nos resulta interesante trabajar con recetas porque permite organizar información concreta como el nombre, el tiempo de preparación y la dificultad. También consideramos que es un tema fácil de explicar y de relacionar con los distintos contenidos que iremos viendo durante la materia. En la primera entrega armamos manualmente un catálogo de recetas dentro del código. A partir de este catálogo fuimos incorporando nuevas funcionalidades y estructuras de datos en las entregas siguientes. Elegimos este tema porque creemos que nos permite aplicar los conceptos de la materia de una forma clara y ordenada.
 
 ## 2. Modelo
 
-Cada receta se representa mediante un objeto de la clase `Receta`, con los datos: id, nombre, tiempo de preparación, dificultad y categoría.
+Cada receta se representa mediante un objeto de la clase `Receta`. Sus atributos son:
 
-En la primera entrega el catálogo se había armado utilizando una lista de Python. A partir de la Entrega 3, el catálogo del `Recetario` utiliza una `ListaEnlazada` propia, implementada mediante nodos y referencias al siguiente elemento.
+- `id`
+- `nombre`
+- `tiempo_min`
+- `dificultad`
+- `categoria`
 
-El identificador `id` permite distinguir de manera única cada receta y no debería modificarse una vez asignado.
+El `id` identifica de forma única a cada receta y no debería modificarse una vez asignado. En cambio, el nombre, el tiempo de preparación, la dificultad y la categoría son datos mutables, ya que el programa permite modificarlos mediante el ABM del catálogo.
 
-Las relaciones entre recetas se utilizan para representar las sub-recetas necesarias para el desglose recursivo implementado en la Entrega 2.
+El `Recetario` representa el catálogo general de recetas. Internamente almacena los objetos `Receta` en una `ListaEnlazada` propia. También mantiene las relaciones entre algunas recetas para realizar el desglose recursivo. Por ejemplo, la receta 10, Empanadas de carne, se relaciona con las recetas 3, Sofrito, y 5, Masa de empanadas.
+
+El `MenuSemanal` representa la colección principal del programa. También utiliza una `ListaEnlazada`, pero tiene un tope máximo de 6 recetas. Las recetas seleccionadas desde el catálogo pueden incorporarse a este menú.
+
+Cuando se agrega una receta al menú semanal, el mismo objeto también se incorpora a dos estructuras auxiliares:
+
+- La `Pila` representa el historial de incorporaciones y permite deshacer utilizando comportamiento LIFO: la última receta agregada es la primera en salir.
+- La `Cola` representa el orden de preparación y utiliza comportamiento FIFO: la primera receta agregada es la primera en salir.
+
+De esta manera, el catálogo, el menú semanal, la pila y la cola cumplen responsabilidades diferentes, pero trabajan con objetos `Receta` del mismo dominio.
 
 ## 3. Recursión (E2)
 
@@ -37,14 +51,16 @@ Las relaciones entre recetas se utilizan para representar las sub-recetas necesa
 
 ### Tabla de Operaciones e Invariantes
 
-| TAD | Operación | Descripción | Complejidad | Invariante de Estructura |
-|---|---|---|---|---|
-| **ListaEnlazada** | `insertar_al_inicio(dato)` | Inserta un nuevo nodo al inicio de la lista. | O(1) | `self._tamanio` refleja el conteo exacto de nodos. |
-| **ListaEnlazada** | `insertar_al_final(dato)` | Recorre la lista y agrega un nodo al final. | O(n) | El último nodo siempre apunta a `None`. |
-| **ListaEnlazada** | `eliminar(dato)` | Remueve el nodo con el dato especificado. | O(n) | La cadena de enlaces se mantiene intacta. |
-| **Pila** | `apilar(dato)` / `desapilar()` | Comportamiento LIFO. Insertar y extraer por la cabeza. | O(1) | El elemento extraído es siempre el último ingresado. |
-| **Cola** | `encolar(dato)` / `desencolar()` | Comportamiento FIFO. Inserta al final y saca por cabeza. | O(1) desencolar / O(n) encolar | Se respeta el orden de llegada de los elementos. |
-| **MenuSemanal** | `agregar(receta)` | Colección principal con tope máximo (6 elementos). | O(n) | `tamanio() <= 6`. Si se supera, lanza `ColeccionLlenaError`. |
+| TAD | Operación | Descripción | Complejidad | Invariante | Dónde se usa |
+|---|---|---|---|---|---|
+| **ListaEnlazada** | `insertar_al_inicio(dato)` | Inserta un nuevo nodo al inicio de la lista. | O(1) | `self._tamanio` refleja el número exacto de nodos. | Es la estructura base utilizada internamente por el Recetario, el MenuSemanal, la Pila y la Cola. |
+| **ListaEnlazada** | `insertar_al_final(dato)` | Recorre la lista y agrega un nodo al final. | O(n) | El último nodo siempre apunta a `None`. | Se utiliza para almacenar las recetas del catálogo, agregar recetas al menú semanal y encolar elementos. |
+| **ListaEnlazada** | `eliminar(dato)` | Busca y elimina el nodo que contiene el dato indicado. | O(n) | Después de eliminar un nodo, la cadena de enlaces continúa siendo válida. | Se utiliza al eliminar recetas y también como operación interna de la pila y la cola. |
+| **Pila** | `apilar(dato)` / `desapilar()` | Implementa comportamiento LIFO: el último elemento ingresado es el primero que sale. | O(1) | El tope representa siempre el último elemento incorporado. | Se utiliza como historial para deshacer la última receta agregada al menú semanal mediante la opción 7. |
+| **Cola** | `encolar(dato)` / `desencolar()` | Implementa comportamiento FIFO: el primer elemento ingresado es el primero que sale. | O(n) encolar / O(1) desencolar | Se mantiene el orden de llegada de los elementos. | Se utiliza como cola de preparación de recetas mediante la opción 8. |
+| **MenuSemanal** | `agregar(receta)` / `eliminar(receta)` | Colección principal del dominio con un máximo de 6 recetas. | O(n) | Su tamaño nunca puede superar el tope de 6 recetas. Si se intenta superarlo, lanza `ColeccionLlenaError`. | Se utiliza en la opción 6 para armar y administrar el menú semanal. |
+
+La `ListaEnlazada` funciona como estructura base para varios componentes del programa. La `Pila` y la `Cola` reutilizan esta estructura, pero ofrecen comportamientos diferentes: LIFO para el historial y FIFO para el orden de preparación.
 
 ## 5. Complejidad y Mediciones (Entrega 4)
 
