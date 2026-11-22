@@ -9,7 +9,7 @@ Mínimos: 8 casos escritos en E2; ejecutados en E3; 15 de regresión en E6 (pila
 | ID | Entrega | Acción (pasos en el CLI) | Datos | Resultado esperado | Resultado | Notas |
 | --- | --- | --- | --- | --- | --- | --- |
 | P01 | E1 | Arrancar el programa y listar catálogo | dataset inicial | lista no vacía, sin traceback | pasa | Prueba de regresión de E1 |
-| P02 | E1 | Buscar un ítem inexistente | id = -1 | mensaje claro, el menú sigue | no corrido | Prueba de regresión |
+| P02 | E1 | Ver detalle de un ítem inexistente | id = -1 | mensaje claro, el menú sigue | pasa | Se probó desde la opción 2; mostró "Receta no encontrada." y el programa continuó funcionando |
 | P03 | E2 | Operación recursiva sobre receta CON sub-recetas | id = 10 (Empanadas de carne) | devuelve la cadena completa `[10, 3, 5]` | pasa | Prueba de regresión de E2 |
 | P04 | E2 | Operación recursiva sobre receta SIN sub-recetas | id = 3 (Sofrito) | devuelve solamente `[3]` (caso base) | pasa | Prueba de regresión de E2 |
 | P05 | E3 | Agregar recetas a la colección principal hasta superar el tope | menú semanal con tope = 6 | al intentar agregar la 7ma receta lanza `ColeccionLlenaError` y no supera el límite | pasa | Colección principal sobre `ListaEnlazada` |
